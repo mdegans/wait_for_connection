@@ -1,6 +1,6 @@
 # `wait_for_connection.py`
 
-
+[![codecov](https://codecov.io/gh/mdegans/wait_for_connection/branch/main/graph/badge.svg?token=N4XZYFVUP4)](https://codecov.io/gh/mdegans/wait_for_connection)
 
 Waits `--timeout` seconds for `--urls` before returning the number of failed
 urls in the returncode. -1 is returned if the failed urls are greater than 126.
