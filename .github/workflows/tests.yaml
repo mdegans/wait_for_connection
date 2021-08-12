@@ -1,0 +1,41 @@
+name: genpasswords
+
+on: [push, pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7, 3.8, 3.9]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest pytest-cov
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Test with pytest
+        run: |
+          pytest
+      - uses: codecov/codecov-action@v2
+        with:
+          flags: ${{ matrix.python-version }}
+          token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
+          name: codecov-umbrella
+          fail_ci_if_error: true
+          verbose: true
+      # workaround for https://github.com/codecov/codecov-action/issues/85
+      # https://github.com/miri64/riotctrl/commit/67ec74078699258624dc3b0c90ad9172686d8aea
+      - name: Upload coverage report
+        run: |
+          bash <(curl -s https://codecov.io/bash) -X search -f "./coverage.xml"
+        env:
+          GITHUB_ACTION: ""
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
