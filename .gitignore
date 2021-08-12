@@ -1,0 +1,6 @@
+*
+!.gitignore
+!wait_for_connection.py
+!README.md
+!setup.cfg
+!test_wait_for_connection.py
